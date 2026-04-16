@@ -1,6 +1,6 @@
 # To-Do Agentic Workflow Demo
 
-This demo shows agentic workflows with a small to-do planner. 
+This demo shows agentic workflows with a small to-do planner. It is separate from the document summarization lab and runs without API keys.
 
 Students can compare:
 
@@ -17,18 +17,34 @@ Students can compare:
 1. Backend
    ```powershell
    cd "Agentic workflow/todo-agent-workflow/backend"
-   npm install
-   npm run start
+   npm.cmd install
+   npm.cmd run start
    ```
    The API listens on `http://localhost:4010`.
+
+   If you see `EADDRINUSE: address already in use :::4010`, the backend is already running. Use the existing server, or stop it:
+
+   ```powershell
+   netstat -ano | Select-String ':4010'
+   Stop-Process -Id <PID>
+   ```
+
+   You can also start a second copy on another port:
+
+   ```powershell
+   $env:PORT=4011
+   npm.cmd run start
+   ```
 
 2. Frontend
    ```powershell
    cd "Agentic workflow/todo-agent-workflow/frontend"
-   npm install
-   npm run dev
+   npm.cmd install
+   npm.cmd run dev
    ```
    Open `http://localhost:5174/single-agent` or `http://localhost:5174/multi-agent`.
+
+   On Windows PowerShell, use `npm.cmd` instead of `npm` if you see `npm.ps1 cannot be loaded because running scripts is disabled on this system`.
 
 ## Instructor Script
 
