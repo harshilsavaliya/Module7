@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo - Figma Make</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="todo-page">
+    <header class="site-header">
+      <a class="brand" href="index.html">Figma Design</a>
+      <nav aria-label="Primary navigation">
+        <a href="index.html">Our Bloom</a>
+        <a href="#figma-preview">Figma Make</a>
+        <a href="#local-preview">Local Todo</a>
+      </nav>
+      <a class="bag-link" href="https://www.figma.com/make/CaIPDqlCAGopPYFQCWa629/Todo?t=3I8Kydck8rMOoXP6-0">Source</a>
+    </header>
+
+    <main>
+      <section class="todo-hero">
+        <p class="eyebrow">Figma Make source</p>
+        <h1>Todo</h1>
+        <p>
+          A local entry for the Figma Make Todo design, with the live Figma embed
+          and a lightweight Todo interface for quick viewing.
+        </p>
+      </section>
+
+      <section class="figma-embed-section" id="figma-preview">
+        <div class="section-heading">
+          <p class="eyebrow">Embedded preview</p>
+          <h2>Figma Make</h2>
+        </div>
+        <div class="figma-frame">
+          <iframe
+            title="Figma Make Todo"
+            src="https://embed.figma.com/make/CaIPDqlCAGopPYFQCWa629/Todo?embed-host=oembed&theme=light"
+            allowfullscreen
+          ></iframe>
+        </div>
+      </section>
+
+      <section class="todo-shell" id="local-preview" aria-labelledby="todo-title">
+        <div class="todo-panel">
+          <p class="eyebrow">Today</p>
+          <h2 id="todo-title">Make the day visible</h2>
+          <form class="todo-form">
+            <label for="todo-input">New task</label>
+            <div>
+              <input id="todo-input" type="text" value="Review Figma Make Todo" />
+              <button type="button">Add</button>
+            </div>
+          </form>
+          <ul class="todo-list">
+            <li>
+              <input id="task-1" type="checkbox" checked />
+              <label for="task-1">Collect the Figma Make source link</label>
+            </li>
+            <li>
+              <input id="task-2" type="checkbox" checked />
+              <label for="task-2">Add an embeddable preview page</label>
+            </li>
+            <li>
+              <input id="task-3" type="checkbox" />
+              <label for="task-3">Turn the mockup into a working app</label>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
