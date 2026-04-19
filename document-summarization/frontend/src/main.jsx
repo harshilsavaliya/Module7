@@ -20,6 +20,7 @@ function App() {
   const [error, setError] = useState("");
   const [isRunning, setIsRunning] = useState(false);
   const [activeStage, setActiveStage] = useState(-1);
+  const [sourceLabel, setSourceLabel] = useState("Sample document");
 
   const timeline = useMemo(() => {
     if (result?.stages) {
@@ -86,6 +87,25 @@ function App() {
   function handleFileChange(event) {
     const selectedFile = event.target.files?.[0] || null;
     setFile(selectedFile);
+    setSourceLabel(selectedFile ? selectedFile.name : "Pasted document");
+  }
+
+  function handleLoadSample() {
+    setText(SAMPLE_TEXT);
+    setFile(null);
+    setError("");
+    setResult(null);
+    setActiveStage(-1);
+    setSourceLabel("Sample document");
+  }
+
+  function handleClear() {
+    setText("");
+    setFile(null);
+    setError("");
+    setResult(null);
+    setActiveStage(-1);
+    setSourceLabel("New document");
   }
 
   return (
@@ -101,11 +121,31 @@ function App() {
         </div>
 
         <form className="summarizer" onSubmit={handleSubmit}>
+          <div className="panel-header">
+            <div>
+              <p className="panel-label">Input workspace</p>
+              <h2>{sourceLabel}</h2>
+            </div>
+            <div className="toolbar">
+              <button type="button" className="ghost-button" onClick={handleLoadSample}>
+                Load sample
+              </button>
+              <button type="button" className="ghost-button" onClick={handleClear}>
+                Clear
+              </button>
+            </div>
+          </div>
+
           <label htmlFor="document-text">Document text</label>
           <textarea
             id="document-text"
             value={text}
-            onChange={(event) => setText(event.target.value)}
+            onChange={(event) => {
+              setText(event.target.value);
+              if (event.target.value.trim()) {
+                setSourceLabel(file ? file.name : "Pasted document");
+              }
+            }}
             rows={13}
           />
 
@@ -124,12 +164,18 @@ function App() {
 
           {error ? <p className="error">{error}</p> : null}
 
-          <button type="submit" disabled={isRunning}>
-            {isRunning ? "Workflow running..." : "Run Codex workflow"}
-          </button>
+          <div className="actions">
+            <button type="submit" disabled={isRunning}>
+              {isRunning ? "Workflow running..." : "Run Codex workflow"}
+            </button>
+            <p className="helper-copy">
+              Upload a plain-text file or paste content directly to narrate the
+              full reasoning timeline.
+            </p>
+          </div>
         </form>
 
-        <Timeline stages={timeline} />
+        <Timeline stages={timeline} isRunning={isRunning} />
 
         <Summary result={result} />
       </section>
@@ -137,14 +183,18 @@ function App() {
   );
 }
 
-function Timeline({ stages }) {
+function Timeline({ stages, isRunning }) {
   return (
     <section className="timeline" aria-label="Workflow stages">
+      <div className="timeline-banner">
+        <p className="panel-label">Agent log</p>
+        <h2>{isRunning ? "Codex is moving through the workflow" : "Workflow timeline"}</h2>
+      </div>
       {stages.map((stage) => (
         <article className="stage" key={stage.id}>
           <div className="stage-header">
             <span className={`status ${stage.status}`}>{stage.status}</span>
-            <h2>{stage.title}</h2>
+            <h3>{stage.title}</h3>
           </div>
           <p>{stage.message}</p>
           <MetricList metrics={stage.metrics} />
@@ -200,6 +250,10 @@ function Summary({ result }) {
           <dt>Target sentences</dt>
           <dd>{result.metrics.targetSentenceCount}</dd>
         </div>
+        <div>
+          <dt>Compression ratio</dt>
+          <dd>{result.metrics.compressionRatio}</dd>
+        </div>
       </dl>
     </section>
   );
@@ -250,7 +304,19 @@ function formatValue(value) {
     }
 
     if (typeof value[0] === "object") {
-      return value.map((item) => `${item.term} (${item.count})`).join(", ");
+      return value
+        .map((item) => {
+          if ("term" in item) {
+            return `${item.term} (${item.count})`;
+          }
+
+          if ("sentence" in item) {
+            return `Sentence ${item.sentence} (${item.score})`;
+          }
+
+          return Object.values(item).join(" ");
+        })
+        .join(", ");
     }
 
     return value.join(", ");

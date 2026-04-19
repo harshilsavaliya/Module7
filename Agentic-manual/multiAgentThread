@@ -1,0 +1,33 @@
+`multiAgentThread`: uses specialist handoffs so separate agents can intake the raw to-do list, prioritize tasks, assign scheduling buckets, review the draft board, and publish the final prioritized task board.
+
+Thread details:
+
+- `intakeThread`
+  Input: raw to-do text from the user, including timing clues such as `today`, `tomorrow`, or named weekdays
+  Decision: split the raw text into individual clean task items and identify useful context
+  Output: normalized task list with basic task metadata
+  Next handoff: send the clean task list to `priorityThread` and `schedulingThread`
+
+- `priorityThread`
+  Input: normalized task list from `intakeThread`
+  Decision: assign task priority based on urgency words, deadlines, and implied importance
+  Output: task list with priority suggestions and reasoning notes
+  Next handoff: send the prioritized task list to `reviewThread`
+
+- `schedulingThread`
+  Input: normalized task list from `intakeThread`
+  Decision: assign each task to `today`, `thisWeek`, or `later`
+  Output: task list with scheduling buckets and timing notes
+  Next handoff: send the scheduled task list to `reviewThread`
+
+- `reviewThread`
+  Input: priority suggestions from `priorityThread` and scheduling buckets from `schedulingThread`
+  Decision: check for conflicts, missing tasks, weak categorization, or unclear notes
+  Output: review notes plus a merged draft board
+  Next handoff: send the reviewed draft to `coordinatorThread`
+
+- `coordinatorThread`
+  Input: reviewed draft board and review notes from `reviewThread`
+  Decision: resolve remaining inconsistencies and prepare the final response
+  Output: final prioritized task board grouped into `today`, `thisWeek`, and `later`
+  Next handoff: none, because the coordinator publishes the final answer

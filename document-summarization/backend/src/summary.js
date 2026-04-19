@@ -44,6 +44,9 @@ function summarizeDocument(input) {
     ? selectedDraft.slice(0, targetSentenceCount)
     : selectedDraft;
   const summary = joinSentences(finalSentences);
+  const compressionRatio = words.length
+    ? Number((tokenize(summary).length / words.length).toFixed(2))
+    : 0;
 
   return {
     summary,
@@ -53,7 +56,8 @@ function summarizeDocument(input) {
       originalSentenceCount: sentences.length,
       summaryWordCount: tokenize(summary).length,
       summarySentenceCount: finalSentences.length,
-      targetSentenceCount
+      targetSentenceCount,
+      compressionRatio
     },
     stages: buildStages({
       words,
@@ -65,7 +69,8 @@ function summarizeDocument(input) {
       needsAdjustment,
       finalSentences,
       summary,
-      targetSentenceCount
+      targetSentenceCount,
+      compressionRatio
     })
   };
 }
@@ -81,7 +86,8 @@ function buildStages(context) {
     needsAdjustment,
     finalSentences,
     summary,
-    targetSentenceCount
+    targetSentenceCount,
+    compressionRatio
   } = context;
 
   const topTerms = Array.from(frequencyMap.entries())
@@ -101,6 +107,9 @@ function buildStages(context) {
       metrics: {
         wordCount: words.length,
         sentenceCount: sentences.length,
+        averageSentenceLength: sentences.length
+          ? Number((words.length / sentences.length).toFixed(1))
+          : 0,
         topTerms
       }
     },
@@ -123,7 +132,15 @@ function buildStages(context) {
       metrics: {
         selectedSentenceIndexes: selectedIndexes,
         draftSentenceCount: selectedDraft.length,
-        draftWordCount: tokenize(draftSummary).length
+        draftWordCount: tokenize(draftSummary).length,
+        rankedSentences: scoredSentences
+          .slice()
+          .sort((a, b) => b.score - a.score || a.index - b.index)
+          .slice(0, Math.min(4, scoredSentences.length))
+          .map((sentence) => ({
+            sentence: sentence.index + 1,
+            score: sentence.score
+          }))
       }
     },
     {
@@ -158,7 +175,8 @@ function buildStages(context) {
       message: "Returned the final condensed summary and the full workflow log.",
       metrics: {
         finalSentenceCount: finalSentences.length,
-        finalWordCount: tokenize(summary).length
+        finalWordCount: tokenize(summary).length,
+        compressionRatio
       }
     }
   ];

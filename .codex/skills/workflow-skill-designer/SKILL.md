@@ -1,17 +1,17 @@
 ---
 name: workflow-skill-designer
-description: Create or revise a skill-based agentic workflow contract in `.github/skills/SKILL.md` for student exercises about single-agent and multi-agent workflows. Use when Codex needs to define or update the skill name, description, roles, thread model, instructions, outputs, handoffs, success criteria, or the follow-up alignment work needed in prompts, backend metadata, or workflow configuration.
+description: Create or revise a skill-based agentic workflow contract for student exercises about single-agent and multi-agent workflows. Use when Codex needs to define or update the skill name, description, roles, thread model, instructions, outputs, handoffs, success criteria, or the follow-up alignment work needed in prompts, backend metadata, or workflow configuration.
 ---
 
 # Workflow Skill Designer
 
-Use this skill to write or update `.github/skills/SKILL.md` as the source of truth for an agentic workflow exercise.
+Use this skill to write or update a workflow contract for an agentic workflow exercise.
 
 `SKILL.md` is the workflow contract. It should clearly define who does the work, how work moves through the workflow, and what a correct result must include.
 
 ## Read First
 
-- Read `.github/skills/README.md` before editing `SKILL.md`.
+- Read the project guidance in `.github/skills/README.md` before editing workflow-contract files in this repo.
 - Use `Agentic-manual/SKILL.md` and the related manual workflow files as reference examples when the repo needs a worked single-agent pattern.
 - Edit section by section rather than replacing the whole file blindly. Keep the workflow internally consistent after each change.
 
@@ -89,7 +89,7 @@ Each thread should make the handoff path easy to follow from intake through fina
 
 When you write or revise the workflow:
 
-1. Open `.github/skills/SKILL.md`.
+1. Open the target `SKILL.md`.
 2. Decide whether the workflow is single-agent or multi-agent.
 3. Give the skill a short, specific name.
 4. Write a brief description of the work the workflow performs.
@@ -118,7 +118,7 @@ Use one thread for a single-agent workflow. Use multiple named threads for multi
 
 ## Output Expectations
 
-The completed `SKILL.md` should make it obvious:
+The completed workflow contract should make it obvious:
 
 - who publishes the final answer
 - what intermediate handoffs exist
@@ -127,7 +127,7 @@ The completed `SKILL.md` should make it obvious:
 
 ## After Editing The Skill
 
-After changing `SKILL.md`, align the implementation that uses it.
+After changing a workflow contract, align the implementation that uses it.
 
 Check the matching prompt, backend workflow metadata, or workflow configuration and update them so they use the same:
 
@@ -137,7 +137,7 @@ Check the matching prompt, backend workflow metadata, or workflow configuration 
 - handoff fields
 - final output shape
 
-If `SKILL.md` changes but the implementation does not, the workflow contract and the running system are out of sync.
+If the workflow contract changes but the implementation does not, the contract and the running system are out of sync.
 
 ## Validation Checklist
 
@@ -157,7 +157,7 @@ Before considering the skill complete, confirm:
 
 Watch for these problems while editing:
 
-- changing `SKILL.md` without updating the workflow implementation
+- changing the workflow contract without updating the workflow implementation
 - adding a new agent without adding a matching thread
 - adding a thread without defining its input or output
 - allowing multiple agents to publish different final answers
@@ -165,6 +165,14 @@ Watch for these problems while editing:
 - skipping review or validation steps
 - leaving success criteria inconsistent with the actual workflow
 
+## Project References
+
+Read these files when you need the repo's example material:
+
+- `.github/skills/README.md`
+- `Agentic-manual/singleAgentThread`
+- `Agentic-manual/single-agent-workflow.md`
+
 ## Final Rule
 
-Treat `SKILL.md` as the authoritative workflow contract. A change is only complete when the skill file, thread design, and implementation all describe the same process.
+Treat the workflow skill file as the authoritative contract. A change is only complete when the skill file, thread design, and implementation all describe the same process.

@@ -1,0 +1,8 @@
+`singleAgentThread`: receives the raw to-do list, plans the work, organizes tasks by urgency, reviews the result, and returns the final prioritized task board.
+
+Thread details:
+
+- Input: raw to-do text from the user, including timing clues such as `today`, `tomorrow`, or named weekdays
+- Decision: identify each task, interpret urgency, assign the task to `today`, `thisWeek`, or `later`, and add simple priority notes when needed
+- Output: a completed task board with cleaned tasks, prioritization, and scheduling notes
+- Next handoff: none, because the same agent owns the full workflow and publishes the final answer

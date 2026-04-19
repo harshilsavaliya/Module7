@@ -11,17 +11,17 @@ This mini-lab demonstrates how Codex behaves as an agent: it understands the doc
 
 1. **Backend**
    ```powershell
-   cd modules/module-07-agentic-workflows/document-summarization/backend
-   npm install
-   npm run start
+   cd document-summarization/backend
+   npm.cmd install
+   npm.cmd run start
    ```
    The server listens on `http://localhost:4001` and exposes `POST /api/summarize` for uploads.
 
 2. **Frontend**
    ```powershell
-   cd modules/module-07-agentic-workflows/document-summarization/frontend
-   npm install
-   npm run dev
+   cd document-summarization/frontend
+   npm.cmd install
+   npm.cmd run dev
    ```
    Visit `http://localhost:5173` to open the React experience. The Vite dev server proxies `/api` calls to Port 4001, so both services can run locally.
 
